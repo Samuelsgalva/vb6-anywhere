@@ -324,3 +324,15 @@ Microsoft. Microsoft, Visual Basic and Visual Studio are trademarks of Microsoft
 
 
 > If the IDE closes when you load a project, run `6-Reparar IDE.bat`.
+
+## Search terms that lead here
+
+If you got here looking for any of these, this is it:
+
+*VB6 on Windows 10* · *VB6 on Windows 11* · *VB6 portable* · *VB6 without installing* ·
+*VB6 without a virtual machine* · *modern VB6* · *run VB6 on 64-bit Windows* ·
+*portable Visual Basic 6 IDE* · *compile VB6 from PowerShell or a pipeline* ·
+*open an old .vbp on Windows 11*
+
+This package is not a replacement for VB6: it repackages the IDE and compiler files so they
+can run from a folder. You need a valid Visual Basic 6.0 licence.

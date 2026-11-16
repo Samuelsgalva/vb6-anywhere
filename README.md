@@ -179,3 +179,15 @@ está bajo licencia [MIT](LICENSE). Esa licencia **no cubre** los binarios de
 Microsoft que el paquete reempaqueta.
 
 Si eres titular de derechos y quieres que se retire algún contenido, abre un *issue*.
+
+## Búsquedas que llevan aquí
+
+Si llegaste buscando alguna de estas cosas, es esto:
+
+*VB6 en Windows 10* · *VB6 en Windows 11* · *VB6 portable* · *VB6 sin instalar* ·
+*VB6 sin máquina virtual* · *VB6 moderno* · *usar VB6 en Windows de 64 bits* ·
+*IDE de Visual Basic 6 portátil* · *compilar VB6 desde PowerShell o un pipeline* ·
+*abrir un .vbp viejo en Windows 11*
+
+Este paquete no sustituye a VB6: reempaqueta los ficheros del IDE y del compilador para
+que se ejecuten desde una carpeta. Necesitas una licencia válida de Visual Basic 6.0.
