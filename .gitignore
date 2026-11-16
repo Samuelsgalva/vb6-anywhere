@@ -1,0 +1,16 @@
+# Instalador de VB6 (no se distribuye)
+03_Instaladores/
+
+# Caches .oca que el IDE regenera al abrir proyectos
+01_IDE/VB98/*.oca
+
+# Basura de compilacion / logs
+*.exe
+!01_IDE/**/*.exe
+!02_Componentes/**/*.exe
+*.log
+*.pdb
+*.ilk
+*.vbw
+*~
+Desinstalar.ps1.bak

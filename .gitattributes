@@ -1,0 +1,32 @@
+# Default: let git decide nothing, keep bytes as-is
+* -text
+
+# Windows scripts must stay CRLF
+*.bat   text eol=crlf
+*.ps1   text eol=crlf
+
+# VB6 sources MUST keep CRLF (VB6 rejects LF-only .frm/.vbp)
+*.frm   text eol=crlf
+*.frx   -text
+*.bas   text eol=crlf
+*.cls   text eol=crlf
+*.vbp   text eol=crlf
+*.vbw   text eol=crlf
+*.ctl   text eol=crlf
+*.pag   text eol=crlf
+
+# Docs
+*.md    text eol=lf
+*.txt   text eol=crlf
+
+# Binaries: never touch
+*.exe   binary
+*.dll   binary
+*.ocx   binary
+*.oca   binary
+*.tlb   binary
+*.olb   binary
+*.cab   binary
+*.dat   binary
+*.mdb   binary
+*.reg   -text
