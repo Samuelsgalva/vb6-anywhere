@@ -4,7 +4,7 @@
 
 A **repackaging** of files from an existing installation of Microsoft Visual Basic 6.0
 (version 6.00.9782, Service Pack 6) so that the IDE and the compiler can run from a folder on
-64-bit Windows 10/11, without an installation and without a virtual machine.
+64-bit Windows 10/11, **without installing VB6** and without a virtual machine.
 
 ## Rights
 
@@ -50,7 +50,7 @@ This project is **not affiliated with, sponsored or endorsed by** Microsoft.
 
 Este repositorio es un **reempaquetado** de archivos de una instalación existente de Microsoft
 Visual Basic 6.0 para que el IDE y el compilador se ejecuten desde una carpeta en Windows 10/11 de
-64 bits, sin instalación y sin máquina virtual.
+64 bits, **sin instalar VB6** y sin máquina virtual.
 
 - **VB6 es propiedad de Microsoft** y está descatalogado (fin de soporte: 8 de abril de 2008).
   Este repositorio **no concede ninguna licencia**: para usarlo necesitas disponer de una licencia

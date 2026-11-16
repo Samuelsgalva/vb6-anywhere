@@ -2,7 +2,7 @@
 
 **English** | [Espanol](README.md)
 
-**The complete VB6 IDE (form designer, F5, breakpoints) and compiler, running from a folder. No installation. No virtual machine.**
+**The complete VB6 IDE (form designer, F5, breakpoints) and compiler, running from a folder. **No VB6 installation, no virtual machine.****
 
 Tested on **Windows 10 and Windows 11 (x64)**, with no VB6 setup required — including a **virgin
 Windows 11 Enterprise VM** where nothing VB6-related had ever been installed.
@@ -35,6 +35,9 @@ It does not install anything into `Program Files`. It lives in its own folder an
 registry keys a VB6 installation would write anyway.
 
 ---
+
+> It is called `1-Instalar.bat` (install) because it registers the runtime, the registry keys and the
+> ActiveX controls. **VB6 itself already ships in the folder and is never installed.**
 
 ## Requirements
 

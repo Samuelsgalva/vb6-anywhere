@@ -50,6 +50,9 @@ No incluye proyectos: sirve para los tuyos.
 Comprobar en cualquier momento: `2-Verificar.bat` → **8 comprobaciones**, todas `OK`.
 Deshacer: `9-Desinstalar.bat`.
 
+> Se llama `1-Instalar.bat` porque **registra** el runtime, las claves y los controles
+> ActiveX. **VB6 en sí ya viene en la carpeta y no se instala nunca.**
+
 La carpeta **no es de usar y tirar**: puedes moverla, pero si la mueves hay que
 repetir `1-Instalar.bat`, porque el registro apunta a esa ruta.
 

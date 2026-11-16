@@ -2,6 +2,12 @@
 
 All notable changes to this package. Dates are local (America/Guayaquil).
 
+## Docs - wording: it is VB6 that is not installed
+
+The tagline said "no installation", which contradicted a script called `1-Instalar.bat`. What is not
+installed is **VB6**: the package only registers the runtime, the registry keys and the controls, and
+both READMEs now say so and explain the script name.
+
 ## Docs - bilingual README, TESTING and LICENSE
 
 - **`README.md` is now Spanish** (the default view) and **`README.en.md` keeps the English one**,
