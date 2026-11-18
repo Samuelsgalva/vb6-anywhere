@@ -95,6 +95,20 @@ foreach ($nombre in 'Visual Basic 6.0 Portable.lnk', 'Visual Basic 6.lnk', 'VB6 
     $lnk = Join-Path $escritorio $nombre
     if (Test-Path $lnk) { Remove-Item $lnk -Force -ErrorAction SilentlyContinue; $quitados++ }
 }
+# Add-in de la rueda del raton
+$addinDll = Join-Path $Raiz '01_IDE\Addins\VB6IDEMouseWheelAddin.dll'
+foreach ($progId in 'VB6IDEMouseWheelAddin.Connect', 'VB6IDEMouseWheelAddin.AddIn') {
+    foreach ($raizAddin in @('HKCU:\Software\Microsoft\Visual Basic\6.0\AddIns', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Visual Basic\6.0\AddIns')) {
+        $k = Join-Path $raizAddin $progId
+        if (Test-Path $k) { Remove-Item $k -Recurse -Force -ErrorAction SilentlyContinue }
+    }
+    if (Test-Path $addinDll) {
+        $regsvr = Join-Path $env:WINDIR 'SysWOW64\regsvr32.exe'
+        if (-not (Test-Path $regsvr)) { $regsvr = Join-Path $env:WINDIR 'System32\regsvr32.exe' }
+        & $regsvr /u /s $addinDll 2>&1 | Out-Null
+    }
+}
+
 # Asociacion .vbp: se retira solo si apunta a nuestro arbol
 $clases = 'HKLM:\SOFTWARE\Classes\WOW6432Node'
 $cmdVbp = (Get-ItemProperty (Join-Path $clases 'VisualBasic.Project\shell\open\command') -ErrorAction SilentlyContinue).'(default)'

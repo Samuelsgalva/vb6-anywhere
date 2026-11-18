@@ -284,3 +284,30 @@ each project finds the version it asks for. `2-Verificar.bat` reports them toget
 
 If you cannot reinstall right now and need that one project to open today, editing its `.vbp` from
 `#1.5#` to `#1.3#` makes it load against the 1.3 build - at the cost of changing the project file.
+
+---
+
+## The mouse wheel does nothing in the IDE
+
+Not a bug in the IDE and not something a package can fix by itself: **VB6 predates `WM_MOUSEWHEEL`**
+in its code panes, so the only way to scroll was dragging the scrollbar. Microsoft shipped an add-in
+for exactly this, and it is what the package installs:
+
+```
+01_IDE\Addins\VB6IDEMouseWheelAddin.dll
+```
+
+`1-Instalar.bat` registers it with `regsvr32` and writes the add-in entry under
+`HKCU\Software\Microsoft\Visual Basic\6.0\AddIns\VB6IDEMouseWheelAddin.Connect` with
+`LoadBehavior = 1`, so the IDE loads it on every start. `2-Verificar.bat` reports it as
+`Rueda del raton (add-in)`.
+
+If the check fails, run `1-Instalar.bat`. If it passes but the wheel still does nothing:
+
+* an IDE that was **already open** when you installed keeps its old add-in list - close it and open
+  it again;
+* check `Add-Ins > Add-In Manager` in the IDE: `VB6 IDE Mouse Wheel` must be ticked in
+  *Loaded/Unloaded* **and** in *Load on Startup*.
+
+Every long-lived VB6 project on Windows 10/11 ends up installing this add-in sooner or later; the
+package just saves you finding it.

@@ -2,6 +2,16 @@
 
 All notable changes to this package. Dates are local (America/Guayaquil).
 
+## Added - mouse wheel scrolling in the IDE
+
+VB6 does not handle `WM_MOUSEWHEEL` in its code panes, so scrolling meant dragging the scrollbar.
+The package now ships and registers Microsoft's **`VB6IDEMouseWheelAddin.dll`**
+(`01_IDE\Addins\`), which fixes it from inside the IDE - no background helper, no hooks.
+
+`1-Instalar.bat` runs `regsvr32` on it and writes the add-in entry with `LoadBehavior = 1`, so it is
+loaded on every IDE start; `9-Desinstalar.bat` unregisters it and removes the entry. The verification
+grew to **9 checks** with `Rueda del raton (add-in)`.
+
 ## Added - `COMCTL32.OCX` (Common Controls 5.0)
 
 A project that references `COMCTL32.OCX` failed on a clean machine: it is **not** `MSCOMCTL.OCX`.

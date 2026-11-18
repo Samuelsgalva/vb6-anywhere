@@ -50,7 +50,7 @@ No incluye proyectos: sirve para los tuyos.
 > También aparece en el **menú Inicio**: escribe `VB6` en el buscador de Windows y lo
 > tienes ahí. El acceso del escritorio no lo encuentra la búsqueda; el del menú Inicio sí.
 
-Comprobar en cualquier momento: `2-Verificar.bat` → **8 comprobaciones**, todas `OK`.
+Comprobar en cualquier momento: `2-Verificar.bat` → **9 comprobaciones**, todas `OK`.
 Deshacer: `9-Desinstalar.bat`.
 
 > Se llama `1-Instalar.bat` porque **registra** el runtime, las claves y los controles
@@ -112,7 +112,7 @@ abre el splash y se cierra sin decir nada (ver más abajo).
 | `6-Reparar IDE.bat` | Repara un IDE que se cierra al cargar un proyecto |
 | `9-Desinstalar.bat` | Retira registro, controles, runtime y acceso directo |
 
-## Las 8 comprobaciones
+## Las 9 comprobaciones
 
 | Comprobación | Qué detecta |
 |---|---|

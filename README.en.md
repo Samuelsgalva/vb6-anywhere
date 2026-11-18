@@ -156,7 +156,7 @@ flowchart TD
     H --> I["6. Import design-time licenses<br/>for those controls"]
     I --> J["7. regsvr32 the ActiveX controls"]
     J --> K["8. Create the desktop shortcut"]
-    K --> L["9. Verify: 8 checks, OK/FAIL each"]
+    K --> L["9. Verify: 9 checks, OK/FAIL each"]
 ```
 
 ### Compiling
