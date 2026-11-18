@@ -8,7 +8,7 @@ check, with the path it is actually using. Most problems are visible there in fi
     OK     IDE VB6.EXE  D:\VB6-Anywhere\01_IDE\VB98\VB6.EXE
     OK     Path del IDE  -> D:\VB6-Anywhere\01_IDE\VB98
     OK     Marca de edicion
-    OK     MSCOMCTL registrado
+    OK     Controles base (6.0 y 5.0)
     OK     Runtime VBA (IDE)  -> C:\...\Common Files\Microsoft Shared\VBA\VBA6\3082\VBE6INTL.DLL
     OK     Registro VS6/VB6
 ```
@@ -138,7 +138,7 @@ careless editor would otherwise rewrite them with LF.
 The ActiveX controls are not registered.
 
 ```powershell
-.\2-Verificar.bat        # look at "MSCOMCTL registrado"
+.\2-Verificar.bat        # look at "Controles base (6.0 y 5.0)"
 .\1-Instalar.bat         # re-registers the 3 bundled controls
 ```
 
@@ -242,3 +242,20 @@ Check it with:
 
 If the two paths are not the same tree, that is the bug. `1-Instalar.bat` now writes the association
 to its own `VB6.EXE`, and `9-Desinstalar.bat` removes it only when it points into its own folder.
+
+---
+
+## `Component 'COMCTL32.OCX' ... not correctly registered`
+
+`COMCTL32.OCX` is **not** `MSCOMCTL.OCX`. They are two different files that VB6 shipped:
+
+| File | What it is | Type library |
+|---|---|---|
+| `MSCOMCTL.OCX` | Windows Common Controls **6.0** (`TreeView`, `ListView`, `Toolbar`...) | `{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}` |
+| `COMCTL32.OCX` | Windows Common Controls **5.0**, kept for older projects | `{6B7E6392-850A-101B-AFC0-4210102A8DA7}` |
+
+A project whose `.vbp` contains `Object=...; COMCTL32.OCX` needs the 5.0 file. If only the 6.0 one is
+registered, the IDE reports the component as missing even though "the common controls" look installed.
+
+Both are bundled since 1.0.1 and `2-Verificar.bat` reports them together as
+`Controles base (6.0 y 5.0)`. If that check fails, run `1-Instalar.bat`.

@@ -52,7 +52,7 @@ These are the 8 checks `2-Verificar.bat` prints:
 | `IDE VB6.EXE` | `01_IDE\VB98\VB6.EXE` is missing |
 | `Path del IDE` | `Path` does not point at this folder (folder was moved) |
 | `Marca de edicion` | the edition mark is missing → the IDE cannot compile |
-| `MSCOMCTL registrado` | the ActiveX controls are not registered |
+| `Controles base (6.0 y 5.0)` | the ActiveX controls are not registered |
 | `Runtime VBA (IDE)` | `VBE6INTL.DLL` is not under `Common Files` → the IDE will exit silently |
 | `Registro VS6/VB6` | the registry import did not happen |
 | `DAO 3.51 (IDE)` | DAO is not registered, so the IDE stops with the DAO350.DLL message |

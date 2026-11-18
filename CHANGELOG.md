@@ -2,6 +2,15 @@
 
 All notable changes to this package. Dates are local (America/Guayaquil).
 
+## Added - `COMCTL32.OCX` (Common Controls 5.0)
+
+A project that references `COMCTL32.OCX` failed on a clean machine: it is **not** `MSCOMCTL.OCX`.
+`MSCOMCTL` is Common Controls **6.0**; `COMCTL32` is the **5.0** file VB6 also shipped for older
+projects, and it was never in the package. It is now bundled and registered like the rest.
+
+The base-controls check was extended to cover both, so this class of problem shows up as a failed
+check instead of a broken project: `Controles base (6.0 y 5.0)`.
+
 ## Fixed - double-clicking a `.vbp` opened a different copy of the IDE
 
 `HKCR\VisualBasic.Project\shell\open\command` still pointed at a previous portable tree, so opening
