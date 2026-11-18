@@ -336,3 +336,6 @@ If you got here looking for any of these, this is it:
 
 This package is not a replacement for VB6: it repackages the IDE and compiler files so they
 can run from a folder. You need a valid Visual Basic 6.0 licence.
+
+> It is also in the **Start menu**: type `VB6` in the Windows search box and it comes up.
+> A desktop shortcut is not returned by Start search; a Start menu entry is.

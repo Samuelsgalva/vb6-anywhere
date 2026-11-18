@@ -185,3 +185,22 @@ It is the only script here that **deletes** state, and it always backs it up fir
 3. Re-runs the installer verification so you can see the result.
 
 The `.reg` backups are written to `%TEMP%` and their paths are printed. Nothing else is touched.
+
+## Shortcuts
+
+`1-Instalar.bat` leaves **four** shortcuts, and only the Start menu ones are reachable from the
+Windows search box:
+
+| Where | Name | Opens |
+|---|---|---|
+| Desktop | `Visual Basic 6` | the IDE (asks for admin, same as `4-Abrir VB6.bat`) |
+| Start menu \ VB6 Anywhere | `VB6 (Visual Basic 6)` | the IDE (asks for admin) |
+| Start menu \ VB6 Anywhere | `VB6 Anywhere (carpeta)` | the package folder in Explorer |
+| Start menu \ VB6 Anywhere | `Desinstalar VB6 Anywhere` | `9-Desinstalar.bat` |
+
+The Start menu group lives in the **per-user** profile
+(`%APPDATA%\Microsoft\Windows\Start Menu\Programs\VB6 Anywhere`), so no elevation is needed to
+create it and it disappears with `9-Desinstalar.bat`, which removes the whole group.
+
+Why both: Windows search indexes the Start menu, **not** the desktop. A desktop-only shortcut does
+not appear when you type `vb6`.

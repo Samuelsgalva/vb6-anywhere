@@ -2,6 +2,16 @@
 
 All notable changes to this package. Dates are local (America/Guayaquil).
 
+## Added - the IDE is searchable from the Windows search box
+
+`1-Instalar.bat` now creates a **Start menu group** (`VB6 Anywhere`) with three entries: the IDE, the
+package folder and the uninstaller. Windows search indexes the Start menu and **not** the desktop, so
+until now typing `vb6` found nothing. The group is created per user, needs no elevation, and
+`9-Desinstalar.bat` removes it.
+
+Fixed while doing it: the uninstaller was deleting `VB6 (sandbox).lnk`, a name the installer stopped
+using, so the desktop shortcut survived an uninstall.
+
 ## Docs - wording: it is VB6 that is not installed
 
 The tagline said "no installation", which contradicted a script called `1-Instalar.bat`. What is not

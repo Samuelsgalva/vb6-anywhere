@@ -47,6 +47,9 @@ No incluye proyectos: sirve para los tuyos.
 3. Doble clic en  4-Abrir VB6.bat    o usa el acceso "Visual Basic 6" del escritorio
 ```
 
+> También aparece en el **menú Inicio**: escribe `VB6` en el buscador de Windows y lo
+> tienes ahí. El acceso del escritorio no lo encuentra la búsqueda; el del menú Inicio sí.
+
 Comprobar en cualquier momento: `2-Verificar.bat` → **8 comprobaciones**, todas `OK`.
 Deshacer: `9-Desinstalar.bat`.
 

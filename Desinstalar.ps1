@@ -89,8 +89,16 @@ Remove-ItemProperty -Path "$base\IE4\DependentComponents" -Name 'VB98' -ErrorAct
 Escribir '    claves del IDE eliminadas' DarkGray
 
 # 4. Acceso directo
-$lnk = Join-Path ([Environment]::GetFolderPath('Desktop')) 'VB6 (sandbox).lnk'
-if (Test-Path $lnk) { Remove-Item $lnk -Force; Escribir '    acceso directo eliminado' DarkGray }
+$escritorio = [Environment]::GetFolderPath('Desktop')
+$quitados = 0
+foreach ($nombre in 'Visual Basic 6.lnk', 'VB6 (sandbox).lnk') {
+    $lnk = Join-Path $escritorio $nombre
+    if (Test-Path $lnk) { Remove-Item $lnk -Force -ErrorAction SilentlyContinue; $quitados++ }
+}
+# Grupo del menu Inicio (es lo que ve la busqueda de Windows)
+$grupo = Join-Path ([Environment]::GetFolderPath('Programs')) 'VB6 Anywhere'
+if (Test-Path $grupo) { Remove-Item $grupo -Recurse -Force -ErrorAction SilentlyContinue; $quitados++ }
+if ($quitados) { Escribir '    accesos directos eliminados (escritorio y menu Inicio)' DarkGray }
 
 Escribir ''
 Escribir '  Listo. El paquete se puede borrar sin dejar rastro (las licencias se dejan).' Green

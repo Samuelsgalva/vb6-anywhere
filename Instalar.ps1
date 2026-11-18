@@ -337,20 +337,45 @@ if ($SoloVerificar) { Escribir ("        {0} controles en el paquete (no se regi
 # ---------------------------------------------------------------------------
 if (-not $SinAccesos -and -not $SoloVerificar) {
     Escribir ''
-    Escribir '  Creando accesos directos en el escritorio...' Cyan
+    Escribir '  Creando accesos directos...' Cyan
+
+    # Crea un .lnk. El flag de "ejecutar como administrador" se pone tocando el
+    # byte 0x15 de la cabecera: WScript.Shell no lo expone y hay que hacerlo asi.
+    function Nuevo-Acceso {
+        param([string]$Ruta, [string]$Destino, [string]$Argumentos, [string]$Carpeta, [string]$Icono, [string]$Descripcion, [switch]$ComoAdmin)
+        $sh = New-Object -ComObject WScript.Shell
+        $lnk = $sh.CreateShortcut($Ruta)
+        $lnk.TargetPath = $Destino
+        if ($Argumentos) { $lnk.Arguments = $Argumentos }
+        if ($Carpeta)    { $lnk.WorkingDirectory = $Carpeta }
+        if ($Icono)      { $lnk.IconLocation = $Icono }
+        if ($Descripcion){ $lnk.Description = $Descripcion }
+        $lnk.Save()
+        if ($ComoAdmin) {
+            $b = [System.IO.File]::ReadAllBytes($Ruta)
+            $b[0x15] = $b[0x15] -bor 0x20
+            [System.IO.File]::WriteAllBytes($Ruta, $b)
+        }
+    }
+
     $escritorio = [Environment]::GetFolderPath('Desktop')
-    $sh = New-Object -ComObject WScript.Shell
-    $lnk = $sh.CreateShortcut((Join-Path $escritorio 'Visual Basic 6.lnk'))
-    $lnk.TargetPath = $Vb6
-    $lnk.WorkingDirectory = $Ide
-    $lnk.IconLocation = "$Vb6,0"
-    $lnk.Description = 'Visual Basic 6 - sandbox portable'
-    $lnk.Save()
-    # Bandera "ejecutar como administrador" (UAC con el usuario actual)
-    $b = [System.IO.File]::ReadAllBytes($lnk.FullName)
-    $b[0x15] = $b[0x15] -bor 0x20
-    [System.IO.File]::WriteAllBytes($lnk.FullName, $b)
-    Escribir '        Visual Basic 6.lnk' Green
+    Nuevo-Acceso -Ruta (Join-Path $escritorio 'Visual Basic 6.lnk') -Destino $Vb6 -Carpeta $Ide `
+                 -Icono "$Vb6,0" -Descripcion 'Visual Basic 6 - IDE portable (VB6 Anywhere)' -ComoAdmin
+    Escribir '        Escritorio: Visual Basic 6' DarkGray
+
+    # El menu Inicio es lo unico que indexa la busqueda de Windows: un acceso en el
+    # escritorio NO aparece al escribir "vb6" en el buscador. Con esto si.
+    $programas = [Environment]::GetFolderPath('Programs')
+    $grupo = Join-Path $programas 'VB6 Anywhere'
+    New-Item -ItemType Directory -Force -Path $grupo | Out-Null
+    Nuevo-Acceso -Ruta (Join-Path $grupo 'VB6 (Visual Basic 6).lnk') -Destino $Vb6 -Carpeta $Ide `
+                 -Icono "$Vb6,0" -Descripcion 'Microsoft Visual Basic 6.0 - IDE portable (VB6 Anywhere)' -ComoAdmin
+    Nuevo-Acceso -Ruta (Join-Path $grupo 'VB6 Anywhere (carpeta).lnk') -Destino (Join-Path $env:WINDIR 'explorer.exe') `
+                 -Argumentos ('"' + $Raiz + '"') -Icono (Join-Path $env:WINDIR 'explorer.exe,0') `
+                 -Descripcion 'Carpeta del paquete VB6 Anywhere'
+    Nuevo-Acceso -Ruta (Join-Path $grupo 'Desinstalar VB6 Anywhere.lnk') -Destino (Join-Path $Raiz '9-Desinstalar.bat') `
+                 -Carpeta $Raiz -Descripcion 'Quita el registro, los controles y el runtime VBA'
+    Escribir '        Menu Inicio: VB6 (Visual Basic 6), carpeta y desinstalar' DarkGray
 }
 
 # ---------------------------------------------------------------------------
