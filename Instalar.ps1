@@ -437,7 +437,7 @@ $checks = @(
     @{ n = 'IDE VB6.EXE';           ok = (Test-Path $Vb6);                          d = $Vb6 },
     @{ n = 'Path del IDE';          ok = ($rutaPath -eq $Ide);                      d = ("-> " + $rutaPath) },
     @{ n = 'Marca de edicion';      ok = ((Get-ItemProperty "$base\IE4\DependentComponents" -Name VB98 -ErrorAction SilentlyContinue) -ne $null); d = '' },
-    @{ n = 'Controles base (6.0 y 5.0)'; ok = ((Test-Path 'HKLM:\SOFTWARE\Classes\WOW6432Node\TypeLib\{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}') -and (Test-Path 'HKLM:\SOFTWARE\Classes\WOW6432Node\TypeLib\{6B7E6392-850A-101B-AFC0-4210102A8DA7}')); d = 'MSCOMCTL + COMCTL32' }
+    @{ n = 'Controles base (6.0 y 5.0)'; ok = ((Test-Path 'HKLM:\SOFTWARE\Classes\WOW6432Node\TypeLib\{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}') -and (Test-Path 'HKLM:\SOFTWARE\Classes\WOW6432Node\TypeLib\{6B7E6392-850A-101B-AFC0-4210102A8DA7}\1.3') -and (Test-Path 'HKLM:\SOFTWARE\Classes\WOW6432Node\TypeLib\{6B7E6392-850A-101B-AFC0-4210102A8DA7}\1.5')); d = 'MSCOMCTL 2.2 + COMCTL32 1.3 y 1.5' }
 )
 # El IDE necesita el runtime VBA en Common Files (si falta: "Error inesperado")
 $vbaOk = $false

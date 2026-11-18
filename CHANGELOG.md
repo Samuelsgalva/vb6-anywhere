@@ -8,8 +8,14 @@ A project that references `COMCTL32.OCX` failed on a clean machine: it is **not*
 `MSCOMCTL` is Common Controls **6.0**; `COMCTL32` is the **5.0** file VB6 also shipped for older
 projects, and it was never in the package. It is now bundled and registered like the rest.
 
-The base-controls check was extended to cover both, so this class of problem shows up as a failed
-check instead of a broken project: `Controles base (6.0 y 5.0)`.
+It also turned out to be a **version** problem: the file exists in builds that register typelib **1.3**
+(6.00.8022, the media) and **1.5** (6.00.9839, later service packs), and VB6 matches the version
+written in the `.vbp`. A project stamped `#1.5#` refuses to load with only 1.3 present, and reports it
+as a missing file in the project folder. **Both builds are now bundled and registered**
+(`COMCTL32.OCX` + `COMCTL32_v15.OCX`).
+
+The base-controls check was extended to cover all three type libraries, so this class of problem shows
+up as a failed check instead of a broken project: `Controles base (6.0 y 5.0)`.
 
 ## Fixed - double-clicking a `.vbp` opened a different copy of the IDE
 

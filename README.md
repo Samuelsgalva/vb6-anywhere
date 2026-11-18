@@ -25,7 +25,7 @@ Windows moderno.
 | **Compilador** | El mismo `VB6.EXE /make`: compila sin abrir el IDE |
 | **Runtime VBA** | `MSO97RT.DLL`, `MRT7ESP.DLL` y `VBA6\3082\VBE6INTL.DLL`, copiados a `Common Files` |
 | **DAO 3.51** | `DAO350.DLL` + registro de su type library (lo necesita el proyecto estándar) |
-| **Controles de Microsoft** | 17 `.ocx` y 3 `.dll` de VB6 Professional: `MSCOMCTL`, `MSCOMCT2`, `THREED32`, `COMCTL32`, `MSADODC`, `MSDATGRD`, `TABCTL32`, `COMDLG32`, `MSMASK32`, `MSFLXGRD`, `MSHFLXGD`, `MSCHRT20`, `MSCOMM32`, `MSINET`, `MSWINSCK`, `MCI32`, `RICHTX32`, `MSRDO20`, `MSSTDFMT`, `MSBIND` |
+| **Controles de Microsoft** | 18 `.ocx` y 3 `.dll` de VB6 Professional: `MSCOMCTL`, `MSCOMCT2`, `THREED32`, `COMCTL32`, `MSADODC`, `MSDATGRD`, `TABCTL32`, `COMDLG32`, `MSMASK32`, `MSFLXGRD`, `MSHFLXGD`, `MSCHRT20`, `MSCOMM32`, `MSINET`, `MSWINSCK`, `MCI32`, `RICHTX32`, `MSRDO20`, `MSSTDFMT`, `MSBIND` |
 | **Árbol VS6** | `MSDev98`, `Tools`, `Common` completos: es lo que hace que un proyecto real abra sin quejarse |
 
 No incluye proyectos: sirve para los tuyos.

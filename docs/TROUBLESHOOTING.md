@@ -257,5 +257,30 @@ to its own `VB6.EXE`, and `9-Desinstalar.bat` removes it only when it points int
 A project whose `.vbp` contains `Object=...; COMCTL32.OCX` needs the 5.0 file. If only the 6.0 one is
 registered, the IDE reports the component as missing even though "the common controls" look installed.
 
-Both are bundled since 1.0.1 and `2-Verificar.bat` reports them together as
-`Controles base (6.0 y 5.0)`. If that check fails, run `1-Instalar.bat`.
+### It is also a version question: `#1.3#` vs `#1.5#`
+
+VB6 does not match the file name, it matches **the type library version written in the `.vbp`**:
+
+```
+Object={6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0; COMCTL32.OCX
+                                             ^^^ this is the typelib version
+```
+
+`COMCTL32.OCX` exists in two builds that register **different typelib versions**:
+
+| File version | Type library | Where it comes from |
+|---|---|---|
+| 6.00.8022 | **1.3** | the VB6 installation media |
+| 6.00.9839 | **1.5** | the later VB6/VS6 service packs |
+
+A project that recorded `#1.5#` will **not** load with only 1.3 registered, and the message it shows
+is the misleading *"Cannot load ...COMCTL32.OCX"* pointing at the project folder - even if the file is
+sitting right there, because the lookup is by GUID + version, not by path. Proven by editing only the
+stamp in a copy of the project: `#1.5#` fails, `#1.3#` opens.
+
+Both builds are therefore bundled (`COMCTL32.OCX` and `COMCTL32_v15.OCX`) and both get registered, so
+each project finds the version it asks for. `2-Verificar.bat` reports them together as
+`Controles base (6.0 y 5.0)` and requires 1.3 **and** 1.5.
+
+If you cannot reinstall right now and need that one project to open today, editing its `.vbp` from
+`#1.5#` to `#1.3#` makes it load against the 1.3 build - at the cost of changing the project file.

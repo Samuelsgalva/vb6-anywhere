@@ -25,7 +25,7 @@ Windows 11 Enterprise VM** where nothing VB6-related had ever been installed.
 | **IDE** | VB6 6.00.9782 (Service Pack 6) — form designer, toolbox, project explorer, properties, object browser and the **full debugger**: breakpoints (F9), F5, step into / step over, Immediate window, Watch, Call Stack |
 | **Build from the IDE** | *File ▸ Make Project.exe* — the normal way, exactly as in 1998 |
 | **Headless build** | `3-Compilar.bat` / `Herramientas\Compilar.ps1` — one command, no GUI: for CI pipelines, AI agents, or simply rebuilding a project without opening it |
-| **Controls** | the 17 `.ocx` and 3 `.dll` that ship with VB6 Professional: `MSCOMCTL`, `MSCOMCT2`, `THREED32`, `COMCTL32`, `MSADODC`, `MSDATGRD`, `TABCTL32`, `COMDLG32` and the rest |
+| **Controls** | the 18 `.ocx` and 3 `.dll` that ship with VB6 Professional: `MSCOMCTL`, `MSCOMCT2`, `THREED32`, `COMCTL32`, `MSADODC`, `MSDATGRD`, `TABCTL32`, `COMDLG32` and the rest |
 | **DAO 3.51** | the data-access library the default VB6 project references; registered only when the machine has none |
 | **Registered, not just copied** | the VBA runtime is also registered where the IDE looks for it (`Shared Tools`), which is what makes it work on a clean machine |
 | **Complete VS6 shared tree** | kept exactly as it was on the reference machine, on purpose — see [Why keep the whole tree?](#why-keep-the-whole-vs6-tree) |
@@ -109,7 +109,7 @@ flowchart LR
         IDE["01_IDE/VB98<br/>VB6.EXE 6.00.9782"]
         SHARED["01_IDE/Common<br/>VS6 shared files (IDE98)"]
         VBA["02_Componentes/VBA<br/>VBE6INTL.DLL, MSO97RT.DLL"]
-        OCX["02_Componentes/Controles<br/>the 17 .ocx shipped with VB6"]
+        OCX["02_Componentes/Controles<br/>the 18 .ocx shipped with VB6"]
         REG["02_Componentes/Licencias<br/>vb6_registro.reg<br/>vb6_controles.reg"]
     end
 
@@ -200,7 +200,7 @@ sequenceDiagram
 │   └── Common/               Visual Studio 6 shared files (IDE98, ...)
 ├── 02_Componentes/
 │   ├── VBA/                  shared VBA runtime required by the IDE
-│   ├── Controles/            the 17 .ocx + 3 .dll that ship with VB6
+│   ├── Controles/            the 18 .ocx + 3 .dll that ship with VB6
 │   └── Licencias/            registry + design-time licenses
 ├── docs/
 │   ├── TESTING.md            every test performed, machine, date and result
