@@ -2,6 +2,20 @@
 
 All notable changes to this package. Dates are local (America/Guayaquil).
 
+## 1.0.1
+
+- **Shortcuts are called `Visual Basic 6.0 Portable`** (desktop and Start menu), which is the name
+  people search for, plus a `VB6` alias in the Start menu so `vb6` still finds it.
+- **The IDE is now searchable from the Windows search box.** Windows indexes the Start menu and not
+  the desktop, so `1-Instalar.bat` creates a Start menu group (`VB6 Anywhere`) with the IDE, the
+  package folder and the uninstaller.
+- **Fixed:** the uninstaller deleted `VB6 (sandbox).lnk`, a name the installer had stopped using, so
+  the desktop shortcut survived an uninstall.
+- README (both languages), `docs/SCRIPTS.md` and this file document the shortcuts.
+
+Everything from 1.0.0 is included: `MSO97RT` registration (the silent-exit fix), DAO 3.51, the 19
+Microsoft controls, `6-Reparar IDE.bat` and `docs/TESTING.md`.
+
 ## Changed - the shortcut is called `Visual Basic 6.0 Portable`
 
 The desktop and Start menu entries are now `Visual Basic 6.0 Portable` instead of `Visual Basic 6`,
