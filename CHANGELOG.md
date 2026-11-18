@@ -12,6 +12,12 @@ The package now ships and registers Microsoft's **`VB6IDEMouseWheelAddin.dll`**
 loaded on every IDE start; `9-Desinstalar.bat` unregisters it and removes the entry. The verification
 grew to **9 checks** with `Rueda del raton (add-in)`.
 
+Fixed on a real machine where the add-in was registered and still did nothing: the add-in entry already
+existed from an older installation with **`LoadBehavior = 0`** (disabled), and the installer only
+looked for the ProgID under `HKLM\SOFTWARE\Classes\WOW6432Node` while this DLL registers it in the
+**native** `Classes` view. The installer now writes `LoadBehavior = 3` (loaded + load on startup) and
+looks in both views.
+
 ## Added - `COMCTL32.OCX` (Common Controls 5.0)
 
 A project that references `COMCTL32.OCX` failed on a clean machine: it is **not** `MSCOMCTL.OCX`.

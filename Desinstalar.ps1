@@ -109,6 +109,12 @@ foreach ($progId in 'VB6IDEMouseWheelAddin.Connect', 'VB6IDEMouseWheelAddin.AddI
     }
 }
 
+# Claves ProgID del add-in de la rueda (las dos vistas)
+foreach ($clases in @('HKLM:\SOFTWARE\Classes', 'HKLM:\SOFTWARE\Classes\WOW6432Node')) {
+    $pk = Join-Path $clases 'VB6IDEMouseWheelAddin.Connect'
+    if (Test-Path $pk) { Remove-Item $pk -Recurse -Force -ErrorAction SilentlyContinue }
+}
+
 # Asociacion .vbp: se retira solo si apunta a nuestro arbol
 $clases = 'HKLM:\SOFTWARE\Classes\WOW6432Node'
 $cmdVbp = (Get-ItemProperty (Join-Path $clases 'VisualBasic.Project\shell\open\command') -ErrorAction SilentlyContinue).'(default)'

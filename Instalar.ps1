@@ -352,33 +352,42 @@ if ($SoloVerificar) { Escribir ("        {0} controles en el paquete (no se regi
     # codigo. Se instala el add-in de Microsoft (VB6IDEMouseWheelAddin), que lo
     # resuelve dentro del propio IDE, sin hooks ni programas en segundo plano.
     $addinDll = Join-Path $Raiz '01_IDE\Addins\VB6IDEMouseWheelAddin.dll'
-    if (Test-Path $addinDll) {
+    # En modo verificar no se toca nada (2-Verificar es de solo lectura).
+    if ((-not $SoloVerificar) -and (Test-Path $addinDll)) {
         $regsvr = Join-Path $env:WINDIR 'SysWOW64\regsvr32.exe'
         if (-not (Test-Path $regsvr)) { $regsvr = Join-Path $env:WINDIR 'System32\regsvr32.exe' }
         & $regsvr /s $addinDll 2>&1 | Out-Null
-        # El ProgID real se descubre en el registro (regsvr32 lo acaba de escribir),
-        # en vez de darlo por supuesto.
-        $progId = $null
-        foreach ($cand in 'VB6IDEMouseWheelAddin.Connect', 'VB6IDEMouseWheelAddin.AddIn') {
-            $ck = Join-Path 'HKLM:\SOFTWARE\Classes\WOW6432Node' $cand
-            if (Test-Path $ck) { $progId = $cand; break }
+
+        # El ProgID vive en la vista NATIVA de Classes, no en WOW6432Node (comprobado
+        # en una PC real: por eso una busqueda solo en WOW6432Node no lo encontraba).
+        $progId = 'VB6IDEMouseWheelAddin.Connect'
+        $clsid = (Get-ItemProperty "HKLM:\SOFTWARE\Classes\$progId\CLSID" -ErrorAction SilentlyContinue).'(default)'
+        if (-not $clsid) { $clsid = (Get-ItemProperty "HKLM:\SOFTWARE\Classes\WOW6432Node\$progId\CLSID" -ErrorAction SilentlyContinue).'(default)' }
+        if (-not $clsid) { $clsid = '{C3A92F28-6ABC-444C-BFCB-07DE046E7B5E}' }
+
+        # La vuelta ProgID -> CLSID tiene que existir, y en las dos vistas.
+        foreach ($clases in @('HKLM:\SOFTWARE\Classes', 'HKLM:\SOFTWARE\Classes\WOW6432Node')) {
+            $pk = Join-Path $clases $progId
+            if (-not (Test-Path $pk)) { New-Item -Path $pk -Force -ErrorAction SilentlyContinue | Out-Null }
+            $ck = Join-Path $pk 'CLSID'
+            if (-not (Test-Path $ck)) { New-Item -Path $ck -Force -ErrorAction SilentlyContinue | Out-Null }
+            New-ItemProperty -Path $ck -Name '(default)' -Value $clsid -PropertyType String -Force -ErrorAction SilentlyContinue | Out-Null
         }
-        if ($progId) {
-            foreach ($raizAddin in @('HKCU:\Software\Microsoft\Visual Basic\6.0\AddIns', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Visual Basic\6.0\AddIns')) {
-                $k = Join-Path $raizAddin $progId
-                if (-not (Test-Path $k)) { New-Item -Path $k -Force -ErrorAction SilentlyContinue | Out-Null }
-                New-ItemProperty -Path $k -Name '(default)'   -Value 'VB6 IDE Mouse Wheel' -PropertyType String -Force -ErrorAction SilentlyContinue | Out-Null
-                New-ItemProperty -Path $k -Name 'Description' -Value 'Scroll the VB6 IDE with the mouse wheel' -PropertyType String -Force -ErrorAction SilentlyContinue | Out-Null
-                New-ItemProperty -Path $k -Name 'CommandLine' -Value '' -PropertyType String -Force -ErrorAction SilentlyContinue | Out-Null
-                New-ItemProperty -Path $k -Name 'LoadBehavior' -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue | Out-Null
-            }
-            Escribir '        rueda del raton: add-in registrado (se carga al abrir el IDE)' DarkGray
+
+        # LoadBehavior: bit 0 = cargado ahora, bit 1 = cargar al arrancar. 3 = los dos.
+        # Con 0 el IDE lo ignora: era el fallo en una PC con restos de otra instalacion.
+        foreach ($raizAddin in @('HKCU:\Software\Microsoft\Visual Basic\6.0\AddIns', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Visual Basic\6.0\AddIns')) {
+            $k = Join-Path $raizAddin $progId
+            if (-not (Test-Path $k)) { New-Item -Path $k -Force -ErrorAction SilentlyContinue | Out-Null }
+            New-ItemProperty -Path $k -Name 'FriendlyName'    -Value 'VB6 IDE Mouse Wheel' -PropertyType String -Force -ErrorAction SilentlyContinue | Out-Null
+            New-ItemProperty -Path $k -Name 'Description'     -Value 'Scroll the VB6 IDE with the mouse wheel' -PropertyType String -Force -ErrorAction SilentlyContinue | Out-Null
+            New-ItemProperty -Path $k -Name 'CommandLineSafe' -Value 0 -PropertyType DWord -Force -ErrorAction SilentlyContinue | Out-Null
+            New-ItemProperty -Path $k -Name 'LoadBehavior'    -Value 3 -PropertyType DWord -Force -ErrorAction SilentlyContinue | Out-Null
         }
-        else {
-            Escribir '        AVISO: el add-in de la rueda no se registro' Yellow
-        }
+        Escribir '        rueda del raton: add-in registrado (LoadBehavior = 3)' DarkGray
     }
 
+# ---------------------------------------------------------------------------
 #  4. Accesos directos
 # ---------------------------------------------------------------------------
 if (-not $SinAccesos -and -not $SoloVerificar) {
@@ -469,7 +478,7 @@ $checks = @(
     @{ n = 'Path del IDE';          ok = ($rutaPath -eq $Ide);                      d = ("-> " + $rutaPath) },
     @{ n = 'Marca de edicion';      ok = ((Get-ItemProperty "$base\IE4\DependentComponents" -Name VB98 -ErrorAction SilentlyContinue) -ne $null); d = '' },
     @{ n = 'Controles base (6.0 y 5.0)'; ok = ((Test-Path 'HKLM:\SOFTWARE\Classes\WOW6432Node\TypeLib\{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}') -and (Test-Path 'HKLM:\SOFTWARE\Classes\WOW6432Node\TypeLib\{6B7E6392-850A-101B-AFC0-4210102A8DA7}\1.3') -and (Test-Path 'HKLM:\SOFTWARE\Classes\WOW6432Node\TypeLib\{6B7E6392-850A-101B-AFC0-4210102A8DA7}\1.5')); d = 'MSCOMCTL 2.2 + COMCTL32 1.3 y 1.5' },
-    @{ n = 'Rueda del raton (add-in)'; ok = ((Test-Path 'HKCU:\Software\Microsoft\Visual Basic\6.0\AddIns\VB6IDEMouseWheelAddin.Connect') -or (Test-Path 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Visual Basic\6.0\AddIns\VB6IDEMouseWheelAddin.Connect')); d = 'add-in del IDE' }
+    @{ n = 'Rueda del raton (add-in)'; ok = (([int]((Get-ItemProperty 'HKCU:\Software\Microsoft\Visual Basic\6.0\AddIns\VB6IDEMouseWheelAddin.Connect' -Name LoadBehavior -ErrorAction SilentlyContinue).LoadBehavior) -band 1) -eq 1); d = 'cargado y al arrancar (3)' }
 )
 # El IDE necesita el runtime VBA en Common Files (si falta: "Error inesperado")
 $vbaOk = $false
