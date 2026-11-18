@@ -2,6 +2,14 @@
 
 All notable changes to this package. Dates are local (America/Guayaquil).
 
+## Fixed - double-clicking a `.vbp` opened a different copy of the IDE
+
+`HKCR\VisualBasic.Project\shell\open\command` still pointed at a previous portable tree, so opening
+a project from Explorer launched that copy - with another registry state and another component cache -
+while the IDE opened from the shortcut used the installed one. Hence "from the `.vbp` it errors, from
+the IDE it works". `1-Instalar.bat` now writes the association to its own `VB6.EXE`, and
+`9-Desinstalar.bat` removes it only if it points into its own folder.
+
 ## 1.0.1
 
 - **Shortcuts are called `Visual Basic 6.0 Portable`** (desktop and Start menu), which is the name

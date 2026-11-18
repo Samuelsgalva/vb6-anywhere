@@ -95,6 +95,15 @@ foreach ($nombre in 'Visual Basic 6.0 Portable.lnk', 'Visual Basic 6.lnk', 'VB6 
     $lnk = Join-Path $escritorio $nombre
     if (Test-Path $lnk) { Remove-Item $lnk -Force -ErrorAction SilentlyContinue; $quitados++ }
 }
+# Asociacion .vbp: se retira solo si apunta a nuestro arbol
+$clases = 'HKLM:\SOFTWARE\Classes\WOW6432Node'
+$cmdVbp = (Get-ItemProperty (Join-Path $clases 'VisualBasic.Project\shell\open\command') -ErrorAction SilentlyContinue).'(default)'
+if ($cmdVbp -and ($cmdVbp -like ('*' + $Raiz + '*'))) {
+    Remove-Item (Join-Path $clases 'VisualBasic.Project') -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item (Join-Path $clases '.vbp') -Recurse -Force -ErrorAction SilentlyContinue
+    Escribir '    asociacion .vbp retirada' DarkGray
+}
+
 # Grupo del menu Inicio (es lo que ve la busqueda de Windows)
 $grupo = Join-Path ([Environment]::GetFolderPath('Programs')) 'VB6 Anywhere'
 if (Test-Path $grupo) { Remove-Item $grupo -Recurse -Force -ErrorAction SilentlyContinue; $quitados++ }

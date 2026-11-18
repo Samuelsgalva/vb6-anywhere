@@ -220,7 +220,22 @@ if (-not $SoloVerificar) {
         Escribir '        AVISO: falta vb6_registro.reg (el IDE no arrancara)' Yellow
     }
 
-    Set-Valor "$base\VisualStudio\6.0" 'InstallDir' $Ide
+        # Asociacion de .vbp: sin esto, el doble clic en un proyecto abre el VB6 que este
+    # asociado en el sistema, que puede ser OTRA copia con otro registro, y da errores.
+    # Abierto desde el IDE no pasa, porque usa el suyo.
+    $clases = 'HKLM:\SOFTWARE\Classes\WOW6432Node'
+    $progId = 'VisualBasic.Project'
+    foreach ($sub in @('', 'shell', 'shell\open', 'shell\open\command')) {
+        $k = if ($sub) { Join-Path $clases ($progId + '\' + $sub) } else { Join-Path $clases $progId }
+        if (-not (Test-Path $k)) { New-Item -Path $k -Force -ErrorAction SilentlyContinue | Out-Null }
+    }
+    Set-ItemProperty -Path (Join-Path $clases $progId) -Name '(default)' -Value 'Microsoft Visual Basic 6.0 Project' -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path (Join-Path $clases ($progId + '\shell\open\command')) -Name '(default)' -Value ('"' + $Vb6 + '" "%1"') -ErrorAction SilentlyContinue
+    if (-not (Test-Path (Join-Path $clases '.vbp'))) { New-Item -Path (Join-Path $clases '.vbp') -Force -ErrorAction SilentlyContinue | Out-Null }
+    Set-ItemProperty -Path (Join-Path $clases '.vbp') -Name '(default)' -Value $progId -ErrorAction SilentlyContinue
+    Escribir '        asociacion .vbp -> este IDE' DarkGray
+
+Set-Valor "$base\VisualStudio\6.0" 'InstallDir' $Ide
     # Path/Path32 son los que usa VB6 para localizar sus propios archivos al
     # arrancar. Si apuntan a otra carpeta el IDE muere con "Unexpected error".
     Set-Valor "$base\Visual Basic\6.0" 'Path'   $Ide

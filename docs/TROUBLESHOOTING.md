@@ -220,3 +220,25 @@ dead cache entries, and re-runs the verification.
 What is **not** the cause, having measured it: a missing `.oca` file next to the OCX (deleting them
 changes nothing) and a wrong `Shared Tools` registration (that is the *IDE never opens* case, see
 above).
+
+---
+
+## Double-clicking a `.vbp` gives errors, opening it from the IDE does not
+
+Classic symptom, and it is not the project: it is **two copies of the IDE**.
+
+`HKCR\VisualBasic.Project\shell\open\command` decides which `VB6.EXE` Windows runs when you
+double-click a project. If that command still points at a **previous portable tree** (or at a real VB6
+installation), Windows launches *that* copy, which has its own registry state, its own component cache
+and its own `Path` - while the package you installed is a different folder. The IDE you open from the
+shortcut uses the correct tree, so the same project works.
+
+Check it with:
+
+```powershell
+(Get-ItemProperty 'Registry::HKEY_CLASSES_ROOT\VisualBasic.Project\shell\open\command').'(default)'
+(Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Visual Basic\6.0').Path
+```
+
+If the two paths are not the same tree, that is the bug. `1-Instalar.bat` now writes the association
+to its own `VB6.EXE`, and `9-Desinstalar.bat` removes it only when it points into its own folder.
