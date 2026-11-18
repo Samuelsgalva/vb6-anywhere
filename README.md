@@ -44,7 +44,7 @@ No incluye proyectos: sirve para los tuyos.
 ```
 1. Descomprime la carpeta donde quieras (ej. D:\VB6-Anywhere)
 2. Doble clic en  1-Instalar.bat     y acepta el UAC
-3. Doble clic en  4-Abrir VB6.bat    o usa el acceso "Visual Basic 6" del escritorio
+3. Doble clic en  4-Abrir VB6.bat    o usa el acceso "Visual Basic 6.0 Portable" del escritorio
 ```
 
 > También aparece en el **menú Inicio**: escribe `VB6` en el buscador de Windows y lo

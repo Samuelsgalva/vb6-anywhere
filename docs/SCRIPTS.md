@@ -193,8 +193,9 @@ Windows search box:
 
 | Where | Name | Opens |
 |---|---|---|
-| Desktop | `Visual Basic 6` | the IDE (asks for admin, same as `4-Abrir VB6.bat`) |
-| Start menu \ VB6 Anywhere | `VB6 (Visual Basic 6)` | the IDE (asks for admin) |
+| Desktop | `Visual Basic 6.0 Portable` | the IDE (asks for admin, same as `4-Abrir VB6.bat`) |
+| Start menu \ VB6 Anywhere | `Visual Basic 6.0 Portable` | the IDE (asks for admin) |
+| Start menu \ VB6 Anywhere | `VB6` | the same IDE, under an alias so searching `vb6` finds it |
 | Start menu \ VB6 Anywhere | `VB6 Anywhere (carpeta)` | the package folder in Explorer |
 | Start menu \ VB6 Anywhere | `Desinstalar VB6 Anywhere` | `9-Desinstalar.bat` |
 

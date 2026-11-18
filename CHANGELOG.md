@@ -2,6 +2,16 @@
 
 All notable changes to this package. Dates are local (America/Guayaquil).
 
+## Changed - the shortcut is called `Visual Basic 6.0 Portable`
+
+The desktop and Start menu entries are now `Visual Basic 6.0 Portable` instead of `Visual Basic 6`,
+which is the name people search for. Because Windows matches the visible name, an entry called only
+"Visual Basic 6.0 Portable" would not answer to `vb6`, so the Start menu group also carries a `VB6`
+alias pointing at the same executable. Both open the IDE with the administrator flag.
+
+`1-Instalar.bat` removes the previous names (`Visual Basic 6.lnk` and, in the enterprise package,
+`VB6 (sandbox).lnk`) so an upgrade does not leave duplicate icons.
+
 ## Added - the IDE is searchable from the Windows search box
 
 `1-Instalar.bat` now creates a **Start menu group** (`VB6 Anywhere`) with three entries: the IDE, the

@@ -359,17 +359,28 @@ if (-not $SinAccesos -and -not $SoloVerificar) {
     }
 
     $escritorio = [Environment]::GetFolderPath('Desktop')
-    Nuevo-Acceso -Ruta (Join-Path $escritorio 'Visual Basic 6.lnk') -Destino $Vb6 -Carpeta $Ide `
-                 -Icono "$Vb6,0" -Descripcion 'Visual Basic 6 - IDE portable (VB6 Anywhere)' -ComoAdmin
-    Escribir '        Escritorio: Visual Basic 6' DarkGray
+    # Nombres anteriores: se retiran para no dejar varios iconos en el escritorio
+    foreach ($viejo in 'VB6 (sandbox).lnk', 'Visual Basic 6.lnk') {
+        $rutaVieja = Join-Path $escritorio $viejo
+        if (Test-Path $rutaVieja) { Remove-Item $rutaVieja -Force -ErrorAction SilentlyContinue }
+    }
+    Nuevo-Acceso -Ruta (Join-Path $escritorio 'Visual Basic 6.0 Portable.lnk') -Destino $Vb6 -Carpeta $Ide `
+                 -Icono "$Vb6,0" -Descripcion 'Visual Basic 6.0 Portable - IDE (VB6 Anywhere)' -ComoAdmin
+    Escribir '        Escritorio: Visual Basic 6.0 Portable' DarkGray
 
     # El menu Inicio es lo unico que indexa la busqueda de Windows: un acceso en el
     # escritorio NO aparece al escribir "vb6" en el buscador. Con esto si.
     $programas = [Environment]::GetFolderPath('Programs')
     $grupo = Join-Path $programas 'VB6 Anywhere'
     New-Item -ItemType Directory -Force -Path $grupo | Out-Null
-    Nuevo-Acceso -Ruta (Join-Path $grupo 'VB6 (Visual Basic 6).lnk') -Destino $Vb6 -Carpeta $Ide `
-                 -Icono "$Vb6,0" -Descripcion 'Microsoft Visual Basic 6.0 - IDE portable (VB6 Anywhere)' -ComoAdmin
+    Nuevo-Acceso -Ruta (Join-Path $grupo 'Visual Basic 6.0 Portable.lnk') -Destino $Vb6 -Carpeta $Ide `
+                 -Icono "$Vb6,0" -Descripcion 'Microsoft Visual Basic 6.0 Portable - IDE (VB6 Anywhere)' -ComoAdmin
+    # Alias corto: Windows busca por el nombre visible, y "Visual Basic 6.0 Portable"
+    # no responde a "vb6". Con este acceso, si.
+    $aliasViejo = Join-Path $grupo 'VB6 (Visual Basic 6).lnk'
+    if (Test-Path $aliasViejo) { Remove-Item $aliasViejo -Force -ErrorAction SilentlyContinue }
+    Nuevo-Acceso -Ruta (Join-Path $grupo 'VB6.lnk') -Destino $Vb6 -Carpeta $Ide `
+                 -Icono "$Vb6,0" -Descripcion 'VB6 - Visual Basic 6.0 Portable' -ComoAdmin
     Nuevo-Acceso -Ruta (Join-Path $grupo 'VB6 Anywhere (carpeta).lnk') -Destino (Join-Path $env:WINDIR 'explorer.exe') `
                  -Argumentos ('"' + $Raiz + '"') -Icono (Join-Path $env:WINDIR 'explorer.exe,0') `
                  -Descripcion 'Carpeta del paquete VB6 Anywhere'

@@ -91,7 +91,7 @@ Escribir '    claves del IDE eliminadas' DarkGray
 # 4. Acceso directo
 $escritorio = [Environment]::GetFolderPath('Desktop')
 $quitados = 0
-foreach ($nombre in 'Visual Basic 6.lnk', 'VB6 (sandbox).lnk') {
+foreach ($nombre in 'Visual Basic 6.0 Portable.lnk', 'Visual Basic 6.lnk', 'VB6 (sandbox).lnk') {
     $lnk = Join-Path $escritorio $nombre
     if (Test-Path $lnk) { Remove-Item $lnk -Force -ErrorAction SilentlyContinue; $quitados++ }
 }
