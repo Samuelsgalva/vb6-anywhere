@@ -12,6 +12,10 @@ All notable changes to this package. Dates are local (America/Guayaquil).
 - **Fixed:** the uninstaller deleted `VB6 (sandbox).lnk`, a name the installer had stopped using, so
   the desktop shortcut survived an uninstall.
 - README (both languages), `docs/SCRIPTS.md` and this file document the shortcuts.
+- **`1-Instalar.bat` retira el acceso `Microsoft Visual Basic 6.0`** que dejaron pruebas
+  anteriores si apunta a una copia portable y no a una instalacion real de VB6. Ese acceso ganaba
+  como *mejor coincidencia* en la busqueda de Windows, porque el nombre del `.lnk` manda sobre el
+  nuestro, y por eso al buscar `visual basic` aparecia sin la palabra *Portable*.
 
 Everything from 1.0.0 is included: `MSO97RT` registration (the silent-exit fix), DAO 3.51, the 19
 Microsoft controls, `6-Reparar IDE.bat` and `docs/TESTING.md`.

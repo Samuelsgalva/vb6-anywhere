@@ -386,6 +386,28 @@ if (-not $SinAccesos -and -not $SoloVerificar) {
                  -Descripcion 'Carpeta del paquete VB6 Anywhere'
     Nuevo-Acceso -Ruta (Join-Path $grupo 'Desinstalar VB6 Anywhere.lnk') -Destino (Join-Path $Raiz '9-Desinstalar.bat') `
                  -Carpeta $Raiz -Descripcion 'Quita el registro, los controles y el runtime VBA'
+
+    # Restos de intentos anteriores: un acceso "Microsoft Visual Basic 6.0" en el menu
+    # Inicio apunta a una copia portable vieja y GANA como mejor coincidencia en la
+    # busqueda de Windows (el nombre del .lnk manda sobre el nuestro). Se retira solo
+    # si su destino NO es una instalacion real de VB6.
+    foreach ($baseInicio in @((Join-Path $env:ProgramData 'Microsoft\Windows\Start Menu\Programs'), [Environment]::GetFolderPath('Programs'))) {
+        if (-not $baseInicio -or -not (Test-Path $baseInicio)) { continue }
+        foreach ($viejo in (Get-ChildItem $baseInicio -Recurse -Filter 'Microsoft Visual Basic 6.0*.lnk' -File -ErrorAction SilentlyContinue)) {
+            $destinoViejo = $null
+            try { $destinoViejo = (New-Object -ComObject WScript.Shell).CreateShortcut($viejo.FullName).TargetPath } catch { }
+            if ($destinoViejo -and ($destinoViejo -notlike '*\Microsoft Visual Studio\VB98\*')) {
+                Remove-Item $viejo.FullName -Force -ErrorAction SilentlyContinue
+                if (-not (Test-Path $viejo.FullName)) {
+                    Escribir '        retirado acceso antiguo: Microsoft Visual Basic 6.0' DarkGray
+                    $carpetaVieja = Split-Path $viejo.FullName -Parent
+                    if ((Get-ChildItem $carpetaVieja -Force -ErrorAction SilentlyContinue | Measure-Object).Count -eq 0) {
+                        Remove-Item $carpetaVieja -Recurse -Force -ErrorAction SilentlyContinue
+                    }
+                }
+            }
+        }
+    }
     Escribir '        Menu Inicio: VB6 (Visual Basic 6), carpeta y desinstalar' DarkGray
 }
 
