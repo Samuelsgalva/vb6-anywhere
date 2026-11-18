@@ -299,7 +299,19 @@ for exactly this, and it is what the package installs:
 
 `1-Instalar.bat` registers it with `regsvr32` and writes the add-in entry under
 `HKCU\Software\Microsoft\Visual Basic\6.0\AddIns\VB6IDEMouseWheelAddin.Connect` with
-`LoadBehavior = 1`, so the IDE loads it on every start. `2-Verificar.bat` reports it as
+`LoadBehavior = 3`, so the IDE loads it on every start.
+
+**`LoadBehavior` is a bitmask**: bit 0 = *loaded now*, bit 1 = *load on startup*. So `3` is the value
+you want, `1` loads it once, and **`0` disables it** - which is exactly what an older installation of
+the same add-in had left behind on a real machine: the IDE obeyed the `0` and ignored an add-in that
+`2-Verificar` could see registered.
+
+Two details the installer now handles, both found the hard way:
+
+* it writes `LoadBehavior = 3` explicitly instead of trusting a value that was already there;
+* it looks for the ProgID under **both** `HKLM\SOFTWARE\Classes` and
+  `HKLM\SOFTWARE\Classes\WOW6432Node`. This DLL registers it in the **native** view, so a lookup
+  that only checks `WOW6432Node` finds nothing and silently skips the add-in. `2-Verificar.bat` reports it as
 `Rueda del raton (add-in)`.
 
 If the check fails, run `1-Instalar.bat`. If it passes but the wheel still does nothing:
