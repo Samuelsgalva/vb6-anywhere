@@ -187,6 +187,19 @@ It is the only script here that **deletes** state, and it always backs it up fir
 
 The `.reg` backups are written to `%TEMP%` and their paths are printed. Nothing else is touched.
 
+### The `.vbp` file association
+
+`1-Instalar.bat` registers `HKCR\VisualBasic.Project\shell\open\command` as
+
+```
+powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden
+    -File "<package>\Herramientas\Abrir-VB6.ps1" -Proyecto "%1"
+```
+
+so double-clicking a project goes through the same elevated launcher as `4-Abrir VB6.bat`. That is what
+keeps VB6 able to write its component cache in `HKLM`; without elevation the IDE warns
+*"Error al intentar tener acceso al registro del sistema"* the first time it meets an uncached control.
+
 ## Shortcuts
 
 `1-Instalar.bat` leaves **four** shortcuts, and only the Start menu ones are reachable from the

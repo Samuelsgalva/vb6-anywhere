@@ -230,10 +230,17 @@ if (-not $SoloVerificar) {
         if (-not (Test-Path $k)) { New-Item -Path $k -Force -ErrorAction SilentlyContinue | Out-Null }
     }
     Set-ItemProperty -Path (Join-Path $clases $progId) -Name '(default)' -Value 'Microsoft Visual Basic 6.0 Project' -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path (Join-Path $clases ($progId + '\shell\open\command')) -Name '(default)' -Value ('"' + $Vb6 + '" "%1"') -ErrorAction SilentlyContinue
+    # El doble clic abre el IDE ELEVADO (via Abrir-VB6.ps1 -Proyecto), igual que
+    # 4-Abrir VB6.bat. Sin elevacion, la primera vez que un proyecto usa un control
+    # sin cachear aparece "Error al intentar tener acceso al registro del sistema".
+    $psi = Join-Path $env:WINDIR 'System32\WindowsPowerShell\v1.0\powershell.exe'
+    if (-not (Test-Path $psi)) { $psi = 'powershell.exe' }
+    $lanzador = Join-Path $Herram 'Abrir-VB6.ps1'
+    $comando = '"' + $psi + '" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $lanzador + '" -Proyecto "%1"'
+    Set-ItemProperty -Path (Join-Path $clases ($progId + '\shell\open\command')) -Name '(default)' -Value $comando -ErrorAction SilentlyContinue
     if (-not (Test-Path (Join-Path $clases '.vbp'))) { New-Item -Path (Join-Path $clases '.vbp') -Force -ErrorAction SilentlyContinue | Out-Null }
     Set-ItemProperty -Path (Join-Path $clases '.vbp') -Name '(default)' -Value $progId -ErrorAction SilentlyContinue
-    Escribir '        asociacion .vbp -> este IDE' DarkGray
+    Escribir '        asociacion .vbp -> IDE elevado (igual que 4-Abrir VB6.bat)' DarkGray
 
 Set-Valor "$base\VisualStudio\6.0" 'InstallDir' $Ide
     # Path/Path32 son los que usa VB6 para localizar sus propios archivos al

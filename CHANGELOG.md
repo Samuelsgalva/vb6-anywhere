@@ -2,6 +2,22 @@
 
 All notable changes to this package. Dates are local (America/Guayaquil).
 
+## Changed - double-clicking a `.vbp` now opens the IDE elevated
+
+Opening a project from Explorer went straight to `vb6.exe`, so the IDE ran without privileges and could
+not write its **component cache** in `HKLM`. The first time a project pulled in a control that was not
+cached yet, VB6 showed *"Error al intentar tener acceso al registro del sistema"* - harmless, but it
+looked like a broken install and came back on every new machine.
+
+The association now points at the same launcher as `4-Abrir VB6.bat`:
+
+```
+powershell.exe -WindowStyle Hidden -File "<package>\Herramientas\Abrir-VB6.ps1" -Proyecto "%1"
+```
+
+`Abrir-VB6.ps1` gained a `-Proyecto` parameter, opens the project in its own folder and exits silently
+when the UAC prompt is cancelled (no console flashing, no hanging `Read-Host`).
+
 ## Added - mouse wheel scrolling in the IDE
 
 VB6 does not handle `WM_MOUSEWHEEL` in its code panes, so scrolling meant dragging the scrollbar.

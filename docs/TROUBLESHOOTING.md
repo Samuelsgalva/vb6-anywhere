@@ -323,3 +323,26 @@ If the check fails, run `1-Instalar.bat`. If it passes but the wheel still does 
 
 Every long-lived VB6 project on Windows 10/11 ends up installing this add-in sooner or later; the
 package just saves you finding it.
+
+---
+
+## "Error al intentar tener acceso al registro del sistema"
+
+VB6 keeps a **component cache in HKLM**: one entry per control, `<typelib GUID>#<version>` -> the path
+of its `.oca` file. A **non-elevated** IDE cannot write there, so the first time a project pulls in a
+control that is not cached yet, the IDE shows exactly that warning. It is harmless - accept it and the
+project opens - but it returns on every machine until the cache is warm, and again for each new control.
+
+The package avoids it by always launching the IDE **elevated**, and the `.vbp` file association goes
+through `Herramientas\Abrir-VB6.ps1 -Proyecto`, so **double-clicking a project asks for UAC too**. If the
+warning shows up, the IDE was started some other way: a shortcut of your own, an old association, or a
+copy of `VB6.EXE` called directly. Use `4-Abrir VB6.bat`, the Start menu entry, or double-click the `.vbp`
+again.
+
+Check which command Windows actually runs:
+
+```powershell
+(Get-ItemProperty 'Registry::HKEY_CLASSES_ROOT\VisualBasic.Project\shell\open\command').'(default)'
+```
+
+It must end in `Abrir-VB6.ps1" -Proyecto "%1"`.
